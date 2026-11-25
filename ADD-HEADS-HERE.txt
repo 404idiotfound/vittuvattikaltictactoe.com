@@ -1,0 +1,15 @@
+ADD MORE HEADS
+==============
+The game has room for 6 heads. Two are included. To add the other four,
+drop square PNGs with a transparent background into this folder using
+EXACTLY these names (same style as head1.png / head2.png):
+
+    head3.png   head4.png   head5.png   head6.png
+
+Recommended size: 420 x 420 px (anything square works).
+No code change is needed: the head picker finds them automatically.
+
+Optional: change the name shown under a head in config.php (HEAD_LABELS)
+and its screen-reader description (HEAD_ALTS).
+Set SHOW_EMPTY_SLOTS to true in config.php to see dashed "+ head3.png"
+boxes for the missing ones while you are preparing the pictures.

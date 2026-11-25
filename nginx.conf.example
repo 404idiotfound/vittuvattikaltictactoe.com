@@ -1,0 +1,38 @@
+# Vithuvattikal Tic Tac Toe - nginx + PHP-FPM example (use instead of .htaccess)
+# Adjust server_name, root and the fastcgi_pass socket for your server.
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/vithuvattikal-tictactoe;
+    index index.php;
+
+    # redirect to https once you have a certificate:
+    # return 301 https://$host$request_uri;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml application/manifest+json;
+
+    location / { try_files $uri $uri/ =404; }
+
+    # PHP
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+
+    # never serve internals
+    location = /config.php          { deny all; }
+    location ~ ^/data/              { deny all; }
+    location ~ /\.(?!well-known)    { deny all; }
+    location ~* \.(md|example)$     { deny all; }
+
+    # static files: long cache (the page adds ?v= to bust it)
+    location ~* \.(png|jpg|jpeg|mp3|ogg|m4a|css|js|webmanifest)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+        add_header X-Content-Type-Options "nosniff" always;
+    }
+
+    error_page 404 /404.html;
+}
